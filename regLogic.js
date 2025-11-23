@@ -24,10 +24,24 @@ regForm.addEventListener("submit", async (e) => {
     });
     const token = await regCall.json();
     localStorage.setItem("token", JSON.stringify(token));
-    alert("Welcome");
+    Swal.fire({
+      icon: "success",
+      title: "Registration Successful!",
+      text: "Your account has been created",
+      background: "#1a1a2e",
+      color: "#fff",
+      confirmButtonColor: "#6366f1",
+    });
     window.location.href = "login.html";
   } catch (error) {
-    alert(error);
+    Swal.fire({
+      icon: "error",
+      title: "Registration Failed",
+      text: error.message || "Something went wrong",
+      background: "#1a1a2e",
+      color: "#fff",
+      confirmButtonColor: "#6366f1",
+    });
     console.log(error);
   }
 });

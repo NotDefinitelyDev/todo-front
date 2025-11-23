@@ -9,6 +9,16 @@ const deleteAllHandle = async () => {
     method: "DELETE",
     credentials: "include",
   });
+  Swal.fire({
+    icon: "success",
+    title: "All todos have been deleted!",
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+    background: "#1a1a2e",
+    color: "#fff",
+  });
   todoCon.innerHTML = "";
   getData();
 };
@@ -29,6 +39,16 @@ todoForm.addEventListener("submit", async (e) => {
       }),
     });
     todoCon.innerHTML = "";
+    Swal.fire({
+      icon: "success",
+      title: "Todo Added!",
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+      background: "#1a1a2e",
+      color: "#fff",
+    });
     getData();
     todoText.value = "";
   } catch (error) {
@@ -57,6 +77,16 @@ async function getData() {
             credentials: "include",
           });
           todoCon.innerHTML = "";
+          Swal.fire({
+            icon: "success",
+            title: "Todo Deleted!",
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            background: "#1a1a2e",
+            color: "#fff",
+          });
           getData();
         } catch (err) {
           console.log(err);

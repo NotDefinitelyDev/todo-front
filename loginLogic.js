@@ -25,11 +25,28 @@ loginForm.addEventListener("submit", async (e) => {
     const fetchedData = await token.json();
     console.log(fetchedData);
     if (!fetchedData.token) {
-      return alert(fetchedData.message);
+      return Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: error.message || "Something went wrong",
+        background: "#1a1a2e",
+        color: "#fff",
+        confirmButtonColor: "#6366f1",
+      });
     }
     localStorage.setItem("token", JSON.stringify(fetchedData));
     if (JSON.parse(localStorage.getItem("token")).token) {
-      // window.location.href = "todolist.html";
+      Swal.fire({
+        icon: "success",
+        title: "Login Done!",
+        text: "You will be redirected in 2s",
+        background: "#1a1a2e",
+        color: "#fff",
+        confirmButtonColor: "#6366f1",
+      });
+      setTimeout(() => {
+        window.location.href = "todolist.html";
+      }, 2000);
     }
   } catch (error) {
     alert(error);

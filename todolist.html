@@ -1,17 +1,368 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo Application</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0f0f1e 0%,
+          #1a1a2e 50%,
+          #16213e 100%
+        );
+        min-height: 100vh;
+        padding: 40px 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.15) 0%,
+          transparent 70%
+        );
+        top: -250px;
+        right: -250px;
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(139, 92, 246, 0.12) 0%,
+          transparent 70%
+        );
+        bottom: -200px;
+        left: -200px;
+        border-radius: 50%;
+        animation: float 10s ease-in-out infinite reverse;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(30px, 30px);
+        }
+      }
+
       .flex {
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: slideDown 0.6s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h1 {
+        color: #ffffff;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -1px;
+      }
+
+      h2 {
+        color: #a0a0b8;
+        font-size: 18px;
+        font-weight: 400;
+      }
+
+      .add-todo-card {
+        background: rgba(26, 26, 46, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 32px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        animation: slideUp 0.6s ease-out 0.1s backwards;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h3 {
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      #todo-form {
+        display: flex;
+        gap: 12px;
+      }
+
+      #todoValue {
+        flex: 1;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      #todoValue:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+
+      #todoValue::placeholder {
+        color: #6b6b80;
+      }
+
+      #todo-form button {
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      #todo-form button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      #todo-form button:hover::before {
+        left: 100%;
+      }
+
+      #todo-form button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+      }
+
+      #todo-form button:active {
+        transform: translateY(0);
+      }
+
+      #todos-container {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        animation: slideUp 0.6s ease-out 0.2s backwards;
+      }
+
+      .todo-item {
+        background: rgba(26, 26, 46, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 20px 24px;
+        display: flex;
         align-items: center;
-        background-color: aqua;
-        margin: 0 auto;
-        max-width: 900px;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+        animation: todoSlideIn 0.4s ease-out;
+      }
+
+      @keyframes todoSlideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .todo-item:hover {
+        background: rgba(26, 26, 46, 0.85);
+        border-color: rgba(99, 102, 241, 0.3);
+        transform: translateX(4px);
+      }
+
+      .todo-text {
+        color: #e0e0f0;
+        font-size: 16px;
+        flex: 1;
+      }
+
+      .todo-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .todo-actions button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .edit-btn {
+        background: rgba(99, 102, 241, 0.2);
+        color: #a5b4fc;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+      }
+
+      .edit-btn:hover {
+        background: rgba(99, 102, 241, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .delete-btn {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+
+      .delete-btn:hover {
+        background: rgba(239, 68, 68, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .delete-all-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        animation: slideUp 0.6s ease-out 0.3s backwards;
+      }
+
+      .delete-all-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .delete-all-btn:hover::before {
+        left: 100%;
+      }
+
+      .delete-all-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+      }
+
+      .delete-all-btn:active {
+        transform: translateY(0);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6b6b80;
+        font-size: 16px;
+      }
+
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 32px;
+        }
+
+        #todo-form {
+          flex-direction: column;
+        }
+
+        #todo-form button {
+          width: 100%;
+        }
+
+        .todo-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .todo-actions {
+          width: 100%;
+          justify-content: flex-end;
+        }
       }
     </style>
     <script>
@@ -22,21 +373,32 @@
   </head>
   <body>
     <div class="flex">
-      <h1>Todo List</h1>
-      <h2>Hello User</h2>
-      <form id="todo-form">
+      <div class="header">
+        <h1>Todo List</h1>
+        <h2>Hello User</h2>
+      </div>
+
+      <div class="add-todo-card">
         <h3>Add Todo</h3>
-        <input type="text" id="todoValue" name="todo" />
-        <button>Add</button>
-      </form>
+        <form id="todo-form">
+          <input
+            type="text"
+            id="todoValue"
+            name="todo"
+            placeholder="What needs to be done?"
+            required
+          />
+          <button type="submit">Add</button>
+        </form>
+      </div>
+
       <div id="todos-container"></div>
-      <button
-        style="background-color: red; margin-top: 30px"
-        onclick="deleteAllHandle()"
-      >
-        Delete All
+
+      <button class="delete-all-btn" onclick="deleteAllHandle()">
+        Delete All Todos
       </button>
     </div>
+
     <script src="./todoLogic.js"></script>
   </body>
 </html>
