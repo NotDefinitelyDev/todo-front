@@ -7,6 +7,7 @@ const backendApi = "https://todo-backend-production-9e4e.up.railway.app/";
 const deleteAllHandle = async () => {
   await fetch(`${backendApi}api/todos`, {
     method: "DELETE",
+    credentials: "include",
   });
   todoCon.innerHTML = "";
   getData();
@@ -19,6 +20,7 @@ todoForm.addEventListener("submit", async (e) => {
   try {
     await fetch(`${backendApi}api/todos`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -38,6 +40,7 @@ todoForm.addEventListener("submit", async (e) => {
 async function getData() {
   const todos = await fetch(`${backendApi}api/todos`, {
     method: "GET",
+    credentials: "include",
   });
   const result = await todos.json();
   const todosArr = result.todos;
