@@ -27,12 +27,14 @@ regForm.addEventListener("submit", async (e) => {
     Swal.fire({
       icon: "success",
       title: "Registration Successful!",
-      text: "Your account has been created",
+      text: "You will be in the login page within 2 secs!",
       background: "#1a1a2e",
       color: "#fff",
       confirmButtonColor: "#6366f1",
     });
-    window.location.href = "login.html";
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 2000);
   } catch (error) {
     Swal.fire({
       icon: "error",
