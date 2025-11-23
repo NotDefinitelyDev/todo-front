@@ -49,7 +49,14 @@ loginForm.addEventListener("submit", async (e) => {
       }, 2000);
     }
   } catch (error) {
-    alert(error);
+    Swal.fire({
+      icon: "error",
+      title: "Try again later",
+      text: "Invalid email or password",
+      background: "#1a1a2e",
+      color: "#fff",
+      confirmButtonColor: "#6366f1",
+    });
     console.log(error);
   }
 });

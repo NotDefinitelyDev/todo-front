@@ -39,7 +39,7 @@ regForm.addEventListener("submit", async (e) => {
     Swal.fire({
       icon: "error",
       title: "Registration Failed",
-      text: error.message || "Something went wrong",
+      text: "Something went wrong",
       background: "#1a1a2e",
       color: "#fff",
       confirmButtonColor: "#6366f1",
