@@ -1,5 +1,5 @@
 const loginForm = document.getElementById("login-form");
-const backendApi = "todo-backend-production-9e4e.up.railway.app/";
+const backendApi = "https://todo-backend-production-9e4e.up.railway.app/";
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();

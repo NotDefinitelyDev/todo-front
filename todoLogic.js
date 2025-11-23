@@ -1,7 +1,7 @@
 const todoForm = document.getElementById("todo-form");
 const todoText = document.getElementById("todoValue");
 const todoCon = document.getElementById("todos-container");
-const backendApi = "todo-backend-production-9e4e.up.railway.app/";
+const backendApi = "https://todo-backend-production-9e4e.up.railway.app/";
 
 // Delete All
 const deleteAllHandle = async () => {
