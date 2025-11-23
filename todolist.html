@@ -1,0 +1,42 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Application</title>
+    <style>
+      .flex {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: aqua;
+        margin: 0 auto;
+        max-width: 900px;
+      }
+    </style>
+    <script>
+      if (!localStorage.getItem("token")) {
+        window.location.href = "error.html";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="flex">
+      <h1>Todo List</h1>
+      <h2>Hello User</h2>
+      <form id="todo-form">
+        <h3>Add Todo</h3>
+        <input type="text" id="todoValue" name="todo" />
+        <button>Add</button>
+      </form>
+      <div id="todos-container"></div>
+      <button
+        style="background-color: red; margin-top: 30px"
+        onclick="deleteAllHandle()"
+      >
+        Delete All
+      </button>
+    </div>
+    <script src="./todoLogic.js"></script>
+  </body>
+</html>
