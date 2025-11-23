@@ -54,6 +54,7 @@ async function getData() {
         try {
           await fetch(`${backendApi}api/todos/${todo._id}`, {
             method: "DELETE",
+            credentials: "include",
           });
           todoCon.innerHTML = "";
           getData();
